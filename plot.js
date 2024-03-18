@@ -85,6 +85,13 @@ function plotData(data, offsetTmp = 0, windowSizeTmp = 100) {
       }
     };
 
+    const customTicks = [
+    { value: 0, label: 'Label 0' },
+    { value: 50, label: 'Label 50' },
+    { value: 100, label: 'Label 100' },
+    { value: 150, label: 'Label 150' },
+    ];
+    
     Chart.register(verticalLinePlugin);
     Chart.register(textAnnotationPlugin);
 
@@ -103,8 +110,18 @@ function plotData(data, offsetTmp = 0, windowSizeTmp = 100) {
                     position: 'bottom'
                 },
 		y: {
-			min: 0,
-			max: maxy
+		  min: 0,
+		  max: maxy,
+		  ticks: {
+                    callback: function(value, index, values) {
+                        if (value % 50 === 0) {
+                            return `channel ${(value+50)/50}`;
+                        }
+                        return '';
+                    },
+                    maxTicksLimit: null, // Remove the limit on the number of ticks
+                    autoSkip: false // Disable auto-skipping of ticks
+                  },
 		}
             },
         plugins: { 

@@ -7,6 +7,34 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => console.error('Error loading the data:', error));
 });
 
+
+function plotData(data) {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const transformedData = transformData(data);
+    const datasets = transformedData.map((channelData, index) => ({
+        label: `Channel ${index + 1}`,
+        data: channelData,
+        fill: false,
+        borderColor: `hsl(${(index / 32) * 360}, 100%, 50%)`, // Color variation for each channel
+        borderWidth: 1,
+    }));
+
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: datasets
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+
 function plotEEGData(data) {
     var canvas = document.getElementById('eegCanvas');
     if (!canvas) return;
@@ -17,6 +45,8 @@ function plotEEGData(data) {
 
     // Assuming `data` is an array of channels, each with a `name` and `data` property.
     // Adjust plotting logic as necessary.
+    console.log('Data is not an array or object:', data);
+    data = data.data;
     data.forEach(function(channel, index) {
         var yOffset = (index + 1) * 100;
         ctx.beginPath();
